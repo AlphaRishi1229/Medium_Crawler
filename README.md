@@ -18,3 +18,10 @@ How to use?
 * Enter the tag you want to search for in search box and press Enter.
 * After that you can see all the crawled blogs on the page.
 * Clicking on a particular blog will redirect to a new page and crawl the blog details in that page.
+
+Also, to make database work you will need to upgrade the migrations
+* Once you start your server, execute into the container using `docker exec -it crawler-medium bash`
+* Simply type, `alembic upgrade head` 
+* All migrations will be updated.
+* To locally check your database you can use the following connection string. 
+* `postgresql+psycopg2://gocomet_read_write:goCometCrawler123@postgresql/gocomet_crawler`
