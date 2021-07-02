@@ -4,13 +4,13 @@
         <title>Medium Crawler</title>
     </head>
 
-    <body>
+    <body onload="onload()">
         <h1 style="text-align:center">Medium Crawled Blogs</h1>
         <form action="" onsubmit="sendMessage(event)" style="text-align:center">
             <input type="text" id="tag_text" autocomplete="off"/>
             <button>GET BLOGS</button>
         </form>
-        <h3 id="current_tag" style="font-size:20px"></h3>
+        <h3 id="current_tag" style="font-size:20px">{{ tag_name }}</h3>
         <ul id="blogs">
         </ul>
         <button onclick="requestNextMessage()">GET MORE BLOGS</button>
@@ -81,7 +81,6 @@
             ws.send(JSON.stringify(
                 {tag: input.value, page: 0}
             ))
-            input.value = ''
             event.preventDefault()
         }
 
@@ -91,6 +90,17 @@
                 {tag: current_tag, page: current_page}
             ))
             event.preventDefault()
+        }
+
+        function onload(event) {
+            tag_name = document.getElementById("current_tag").textContent;
+            if(tag_name != "") {
+                console.log("sent")
+                console.log(tag_name)
+                ws.send(JSON.stringify(
+                    {tag: tag_name, page: 0}
+                ))
+            }
         }
     </script>
 </html>

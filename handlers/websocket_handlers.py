@@ -6,6 +6,7 @@ from processors.crawler import CrawlMedium
 
 
 async def crawler_websocket(websocket: WebSocket):
+    """The function that starts the websocket for listening and sending events."""
     await websocket.accept()
     while True:
         tag_data = await websocket.receive_json()

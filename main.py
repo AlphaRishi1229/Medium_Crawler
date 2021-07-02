@@ -1,3 +1,4 @@
+"""The main fastapi server."""
 from fastapi import FastAPI
 
 from urls import blogs_api_router, websocket_v1_router

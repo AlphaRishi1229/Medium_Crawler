@@ -5,6 +5,7 @@
 <body>
     <div id="blog_title"></div>
     <div id="blog_main"></div>
+    <div style="font-size:20px">TAGS</div>
     <div id="blog_tags"></div>
     <p id="temp_title">{{ title }}</p>
     <p id="temp_blog">{{ blog }}</p>
@@ -27,10 +28,18 @@
         blog.innerHTML = blog.textContent;
 
         html_text = document.getElementById("temp_tags").textContent;
+        final_tags = html_text.replaceAll('\'','').replaceAll(' ','').replace('[','').replace(']','').split(',')
         document.getElementById("temp_tags").remove();
-        blog = document.getElementById("blog_tags");
-        blog.innerHTML = html_text;
-        blog.innerHTML = blog.textContent;
+        for (tag of final_tags) {
+            blog = document.getElementById("blog_tags");
+            var list_element = document.createElement("li")
+            var node_a = document.createElement("a");
+            var title = document.createTextNode(tag)
+            node_a.appendChild(title)
+            node_a.href = "http://localhost:8000/blogs/?tag="+tag
+            list_element.appendChild(node_a)
+            blog.appendChild(list_element)
+        }
     }
     render_blog()
 </script>

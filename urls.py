@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from starlette.routing import WebSocketRoute
 
 from handlers.api_handlers import get_blog_by_id, get_blogs
 from handlers.websocket_handlers import crawler_websocket

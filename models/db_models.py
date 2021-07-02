@@ -33,7 +33,7 @@ class Blogs(Base):
     tags = Column(ARRAY(Integer, ForeignKey("tags.id")))
 
     __table_args__ = (
-        UniqueConstraint(post_id, title, blog_desc, blog_data, blog_link, author_id, read_time, tags, name='_blogs_uc'),
+        UniqueConstraint(post_id, title, blog_desc, blog_link, author_id, read_time, tags, name='_blogs_uc'),
         Index("idx_primary_identifier", "post_id"),
         Index("ix_combined_created_id", "post_id", "created_time"),
         Index("ix_created_on", "created_time")
