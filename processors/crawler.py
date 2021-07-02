@@ -92,7 +92,7 @@ class CrawlBlog:
             Dict: The data that has been crawled from the given url.
         """
         final_data = get_blog_from_db(self.blog_id)
-        if not final_data["blogs"]:
+        if not final_data.get("blogs", None):
             response = await aiohttp_request(request_type="GET", url=url)
             soup_obj = BeautifulSoup(response["content"], "html.parser")
             all_data = soup_obj.find("div", class_="s")
