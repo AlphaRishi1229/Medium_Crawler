@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Medium Crawler</title>
+    </head>
+
+    <body onload="onload()">
+        <h1 style="text-align:center">Medium Crawled Blogs</h1>
+        <form action="" onsubmit="sendMessage(event)" style="text-align:center">
+            <input type="text" id="tag_text" autocomplete="off"/>
+            <button>GET BLOGS</button>
+        </form>
+        <h3 id="current_tag" style="font-size:20px">{{ tag_name }}</h3>
+        <ul id="blogs">
+        </ul>
+        <button onclick="requestNextMessage()">GET MORE BLOGS</button>
+    </body>
+
+    <script>
+        var ws = new WebSocket("ws://localhost:8000/ws/v1/blogs/crawler");
+        var current_tag = ""
+        var current_page = 0
+
+        ws.onmessage = function(event) {
+            var blog_content = JSON.parse(event.data)
+            for (blog of blog_content){
+                create_blog(blog)
+            }
+        };
+
+        function create_blog(blog) {
+            var blogs_block = document.getElementById("blogs")
+
+            var list_element = document.createElement("li")
+            var node_a = document.createElement("a");
+            var title = document.createTextNode(blog.title)
+            node_a.appendChild(title)
+            node_a.href = "http://localhost:8000/blogs/"+blog.post_id
+            node_a.target = "_blank"
+            node_a.rel = "noreferrer noopener"
+            list_element.style.fontSize = "30px";
+            list_element.style.fontStyle = "bold"
+            list_element.appendChild(node_a)
+            blogs_block.appendChild(list_element)
+
+            var div_element = document.createElement("div")
+            var blog_content = document.createTextNode(blog.blog_desc)
+            div_element.style.fontSize = "23px";
+            div_element.appendChild(blog_content)
+            blogs_block.appendChild(div_element)
+
+            var div_element = document.createElement("div")
+            var blog_content = document.createTextNode("- "+blog.creator)
+            div_element.style.fontSize = "18px";
+            div_element.style.fontStyle = "italic"
+            div_element.appendChild(blog_content)
+            blogs_block.appendChild(div_element)
+
+            var div_element = document.createElement("div")
+            created_on = blog.created_time
+            if(created_on == 0) {
+                var blog_created_time = document.createTextNode("Few Mins Ago")
+            }
+            else {
+                var blog_created_time = document.createTextNode(blog.post_created_time + " Hours Ago")
+            }
+            var blog_read_time = document.createTextNode(" | " + blog.read_time + " Mins Read")
+            div_element.style.fontSize = "15px";
+            div_element.appendChild(blog_created_time)
+            div_element.appendChild(blog_read_time)
+            blogs_block.appendChild(div_element)
+
+            var divider = document.createElement("hr")
+            blogs_block.appendChild(divider)
+        }
+
+        function sendMessage(event) {
+            var input = document.getElementById("tag_text")
+            current_tag = input.value
+            console.log({tag: input.value, page: 0})
+            ws.send(JSON.stringify(
+                {tag: input.value, page: 0}
+            ))
+            event.preventDefault()
+        }
+
+        function requestNextMessage(event) {
+            current_page = current_page + 10
+            ws.send(JSON.stringify(
+                {tag: current_tag, page: current_page}
+            ))
+            event.preventDefault()
+        }
+
+        function onload(event) {
+            tag_name = document.getElementById("current_tag").textContent;
+            if(tag_name != "") {
+                console.log("sent")
+                console.log(tag_name)
+                ws.send(JSON.stringify(
+                    {tag: tag_name, page: 0}
+                ))
+            }
+        }
+    </script>
+</html>

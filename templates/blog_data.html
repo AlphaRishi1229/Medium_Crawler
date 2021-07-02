@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>Blog Details</title>
+</head>
+<body>
+    <div id="blog_title"></div>
+    <div id="blog_main"></div>
+    <div style="font-size:20px">TAGS</div>
+    <div id="blog_tags"></div>
+    <p id="temp_title">{{ title }}</p>
+    <p id="temp_blog">{{ blog }}</p>
+    <p id="temp_tags">{{ tags }}</p>
+</body>
+<script>
+    function render_blog() {
+        html_text = document.getElementById("temp_title").textContent;
+        document.getElementById("temp_title").remove();
+        blog = document.getElementById("blog_title");
+        blog.style.fontSize = "30px";
+        blog.style.fontStyle = "bold"
+        blog.innerHTML = html_text;
+        blog.innerHTML = blog.textContent;
+
+        html_text = document.getElementById("temp_blog").textContent;
+        document.getElementById("temp_blog").remove();
+        blog = document.getElementById("blog_main");
+        blog.innerHTML = html_text;
+        blog.innerHTML = blog.textContent;
+
+        html_text = document.getElementById("temp_tags").textContent;
+        final_tags = html_text.replaceAll('\'','').replaceAll(' ','').replace('[','').replace(']','').split(',')
+        document.getElementById("temp_tags").remove();
+        for (tag of final_tags) {
+            blog = document.getElementById("blog_tags");
+            var list_element = document.createElement("li")
+            var node_a = document.createElement("a");
+            var title = document.createTextNode(tag)
+            node_a.appendChild(title)
+            node_a.href = "http://localhost:8000/blogs/?tag="+tag
+            list_element.appendChild(node_a)
+            blog.appendChild(list_element)
+        }
+    }
+    render_blog()
+</script>
+</html>
